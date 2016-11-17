@@ -25,9 +25,20 @@ user.save(function (err) {
   if (err) // ...
 	console.log('Ошибка сохранения пользователя');
 });
+user = new User({ id: 2, firstname: 'Сергей', lastname: 'Иванов' });
+user.save(function (err) {
+  if (err) // ...
+	console.log('Ошибка сохранения пользователя');
+});
 
 var Task = db.model('Task', taskSchema);
 var task = new Task({id: 1, title: "Самая трудная задача", assignee: 1, length: 35, state: 0});
+task.save(function (err) {
+  if (err) // ...
+	console.log('Ошибка создания задачи');
+});
+
+task = new Task({id: 2, title: "Задача полегче", assignee: 1, length: 20, state: 0});
 task.save(function (err) {
   if (err) // ...
 	console.log('Ошибка создания задачи');
@@ -38,7 +49,7 @@ User.find({lastname: 'Петров'}, function(err, results) {
 				console.log( err );
 			}
 			else if(results.length){
-				console.log( "Найденный:", results );
+				console.log( "Найденные пользователи:", results );
 			}
 			else {
 				console.log( "Нет пользователей с данным условием поиска." );
@@ -50,9 +61,13 @@ Task.find({assignee: 1}, function(err, results) {
 				console.log( err );
 			}
 			else if(results.length){
-				console.log( "Найденный:", results );
+				console.log( "Найденные задачи:", results );
 			}
 			else {
 				console.log( "Нет задач с данным условием поиска." );
 			}
 });
+setTimeout(function() {
+	User.remove().exec();
+	Task.remove().exec();
+}, 5000);

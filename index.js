@@ -67,6 +67,29 @@ Task.find({assignee: 1}, function(err, results) {
 				console.log( "Нет задач с данным условием поиска." );
 			}
 });
+
+var conditions = { title: 'Задача полегче' }
+  , update = { assignee: 2 }
+  , options = { multi: true };
+
+Task.update(conditions, update, options, callback);
+
+function callback (err, numAffected) {
+	console.log( "Количество измененных документов %d.",  numAffected.nModified);
+}
+
+Task.find({assignee: 2}, function(err, results) {
+			if(err) {
+				console.log( err );
+			}
+			else if(results.length){
+				console.log( "Найденные задачи:", results );
+			}
+			else {
+				console.log( "Нет задач с данным условием поиска." );
+			}
+});
+
 setTimeout(function() {
 	User.remove().exec();
 	Task.remove().exec();

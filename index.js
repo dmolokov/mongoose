@@ -13,6 +13,10 @@ var taskSchema = new Schema({
 	create_date: { type: Date, default: Date.now }
 });
 
+taskSchema.methods.change_status = function(newstatus) {
+        this.state = newstatus;
+    };
+
 var userSchema = new Schema({
 	id: Number,
 	firstname: String,
@@ -79,6 +83,20 @@ function callback (err, numAffected) {
 }
 
 Task.find({assignee: 2}, function(err, results) {
+			if(err) {
+				console.log( err );
+			}
+			else if(results.length){
+				console.log( "Найденные задачи:", results );
+			}
+			else {
+				console.log( "Нет задач с данным условием поиска." );
+			}
+});
+
+Task.find({assignee: 2}, function(err, results) {results.forEach.change_status(3)});
+
+Task.find({state: 3}, function(err, results) {
 			if(err) {
 				console.log( err );
 			}

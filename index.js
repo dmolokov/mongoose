@@ -5,13 +5,12 @@ var db = mongoose.connection;
 var Schema = mongoose.Schema;
 
 var taskSchema = new Schema({
-  title:  String,
-  assignee: String,
-  body:   String,
-  length: String,
-  state: Number,
-  //comments: [{ body: String, date: Date }],
-  create_date: { type: Date, default: Date.now }
+	id: Number,
+	title:  String,
+	assignee: Number,
+	length: Number,
+	state: Number, // 0 - Proposed, 1 - Active, 2 - Resolved, 3 - Closed
+	create_date: { type: Date, default: Date.now }
 });
 
 var userSchema = new Schema({
@@ -27,7 +26,14 @@ user.save(function (err) {
 	console.log('Ошибка сохранения пользователя');
 });
 
-User.find({id: 1, firstname: 'Иван', lastname: 'Петров'}, function(err, results) {
+var Task = db.model('Task', taskSchema);
+var task = new Task({id: 1, title: "Самая трудная задача", assignee: 1, length: 35, state: 0});
+task.save(function (err) {
+  if (err) // ...
+	console.log('Ошибка создания задачи');
+});
+
+User.find({lastname: 'Петров'}, function(err, results) {
 			if(err) {
 				console.log( err );
 			}
@@ -35,6 +41,18 @@ User.find({id: 1, firstname: 'Иван', lastname: 'Петров'}, function(err
 				console.log( "Найденный:", results );
 			}
 			else {
-				console.log( "Нет документов с данным условием поиска." );
+				console.log( "Нет пользователей с данным условием поиска." );
+			}
+});
+
+Task.find({assignee: 1}, function(err, results) {
+			if(err) {
+				console.log( err );
+			}
+			else if(results.length){
+				console.log( "Найденный:", results );
+			}
+			else {
+				console.log( "Нет задач с данным условием поиска." );
 			}
 });
